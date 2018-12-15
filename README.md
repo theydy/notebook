@@ -2,6 +2,8 @@
 
 记录读书笔记 + 知识整理
 
+全部文章列表 [issues](https://github.com/theydy/NoteBook/issues)
+
 ### 笔记整理
 
 #### css
