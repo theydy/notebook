@@ -12,6 +12,8 @@
 
 [BFC 知识整理](https://github.com/theydy/NoteBook/issues/6)
 
+[flex 与 grid 常用属性总结](https://github.com/theydy/NoteBook/issues/7)
+
 #### javascript
 
 [JavaScript 面向对象](https://github.com/theydy/NoteBook/issues/4)
