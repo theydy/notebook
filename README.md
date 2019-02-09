@@ -18,6 +18,8 @@
 
 [JavaScript 面向对象](https://github.com/theydy/NoteBook/issues/4)
 
+[jsonp 的原理和实现](https://github.com/theydy/NoteBook/issues/8)
+
 #### HTTP 协议
 
 [HTTP 协议相关知识点整理](https://github.com/theydy/NoteBook/issues/3)
