@@ -20,9 +20,11 @@
 
 [jsonp 的原理和实现](https://github.com/theydy/NoteBook/issues/8)
 
-#### HTTP 协议
+#### 其他
 
 [HTTP 协议相关知识点整理](https://github.com/theydy/NoteBook/issues/3)
+
+[常用跨域方法](https://github.com/theydy/NoteBook/issues/9)
 
 ### 翻译
 
