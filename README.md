@@ -20,6 +20,8 @@
 
 [jsonp 的原理和实现](https://github.com/theydy/NoteBook/issues/8)
 
+[JS 类型和类型转换](https://github.com/theydy/NoteBook/issues/11)
+
 #### 其他
 
 [HTTP 协议相关知识点整理](https://github.com/theydy/NoteBook/issues/3)
