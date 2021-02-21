@@ -6,8 +6,6 @@
 
 ### 笔记整理
 
-#### Vue 源码学习
-
 [Vue 源码学习](https://github.com/theydy/notebook/issues?q=is%3Aopen+is%3Aissue+label%3AVue)
 
 #### css
