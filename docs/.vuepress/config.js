@@ -4,7 +4,7 @@ const { interviewSideBar, webpackSidebar, vueSidebar, reactSidebar } = require('
 module.exports = {
   title: 'theydy',
   description: 'theydy 的个人博客',
-  base: '/blog/',
+  base: '/notebook/',
   head: [
     ['link', { rel: 'icon', href: '/icon.png' }]
   ],
