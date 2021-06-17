@@ -1,0 +1,24 @@
+{
+  "name": "notebook",
+  "version": "1.0.0",
+  "description": "记录读书笔记 + 知识整理",
+  "main": "index.js",
+  "dependencies": {
+    "vuepress": "^1.8.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theydy/notebook.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/theydy/notebook/issues"
+  },
+  "homepage": "https://github.com/theydy/notebook#readme"
+}
