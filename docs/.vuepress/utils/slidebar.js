@@ -48,6 +48,13 @@ const otherSideBar = [
       'babel/babel-plugin',
     ],
   },
+  {
+    title: '',
+    collapsable: false,
+    children: [
+      'snippets',
+    ],
+  },
 ]
 
 module.exports = {

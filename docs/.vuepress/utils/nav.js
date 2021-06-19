@@ -29,6 +29,10 @@ const nav = [
       {
         text: 'babel',
         link: '/other/babel/'
+      },
+      {
+        text: 'snippets',
+        link: '/other/snippets/'
       }
     ]
   }
