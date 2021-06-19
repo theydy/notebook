@@ -1,5 +1,11 @@
 const { nav } = require('./utils/nav.js');
-const { interviewSideBar, webpackSidebar, vueSidebar, reactSidebar } = require('./utils/slidebar.js');
+const { 
+  interviewSideBar,
+  webpackSidebar,
+  vueSidebar,
+  reactSidebar,
+  otherSideBar,
+ } = require('./utils/slidebar.js');
 
 module.exports = {
   title: 'theydy',
@@ -19,10 +25,11 @@ module.exports = {
     repoLabel: 'Github',
     nav,
     sidebar: {
-      '/interview/': [interviewSideBar],
-      '/webpack/': [webpackSidebar],
+      '/interview/': interviewSideBar,
+      '/webpack/': webpackSidebar,
       '/vue/': vueSidebar,
-      '/react/': reactSidebar
+      '/react/': reactSidebar,
+      '/other/': otherSideBar,
     }
   },
   configureWebpack: {

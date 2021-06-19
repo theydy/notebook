@@ -20,11 +20,15 @@ const nav = [
     items: [
       {
         text: 'TypeScript',
-        link: '/typescript/'
+        link: '/other/typescript/'
       },
       {
         text: 'Node',
-        link: '/node/'
+        link: '/other/node/'
+      },
+      {
+        text: 'babel',
+        link: '/other/babel/'
       }
     ]
   }
