@@ -4,14 +4,15 @@ const interviewSideBar = [
     collapsable: false,
     children: [
       'js',
-      // 'css',
+      'css',
       'code',
-      // 'browser',
+      'browser',
       'http',
-      // 'vue',
-      // 'safety',
-      // 'webpack',
-      // 'algorithm',
+      'vue',
+      'safety',
+      'webpack',
+      'optimization',
+      'algorithm',
     ]
   },
 ]
