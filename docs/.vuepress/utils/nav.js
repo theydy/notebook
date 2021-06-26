@@ -33,6 +33,10 @@ const nav = [
       {
         text: 'snippets',
         link: '/other/snippets/'
+      },
+      {
+        text: 'Git',
+        link: '/other/git/'
       }
     ]
   }

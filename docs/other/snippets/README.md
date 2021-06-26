@@ -443,3 +443,64 @@ function broadcast(componentName, eventName, params) {
   });
 }
 ```
+
+## 快速切换本地 git 账号配置
+
+```text
+name1
+email1
+name2
+email2
+
+```
+
+```shell
+#!/bin/sh
+
+setGitConfig(){
+    git config --global user.name $1
+    git config --global user.email $2
+}
+
+wrapperFunc(){
+    if test $2 != $1
+    then
+        setGitConfig $2 $3
+    fi
+}
+
+
+i=0
+while read line 
+do
+    myArray[$i]="$line"
+    i=$((i+1))
+done <  ~/Desktop/git-config.txt
+
+read -t 30 -p "please enter your want git user config(l/c):" config
+# -t，设置输入超时时间（本语句设置超时时间为5秒），默认单位是秒；-p，指定输入提示
+
+current_name=$(git config --global user.name)
+
+echo "before config is:"
+git config --global user.name
+git config --global user.email
+echo "\n"
+
+if test $config = 'l'
+then
+    wrapperFunc $current_name ${myArray[0]} ${myArray[1]}
+elif test $config = 'c'
+then
+    wrapperFunc $current_name ${myArray[2]} ${myArray[3]}
+fi
+
+echo "now config is:"
+git config --global user.name
+git config --global user.email
+
+
+sleep 3s
+
+exit 0
+```
