@@ -193,5 +193,3 @@ else
   exit 1
 fi
 ```
-
-<div style="color:white">test github actions</div>
