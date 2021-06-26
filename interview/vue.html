@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>vue 面试题 | theydy</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    <link rel="icon" href="/notebook/icon.png">
+    <meta name="description" content="theydy 的个人博客">
+    
+    <link rel="preload" href="/notebook/assets/css/0.styles.254e6a27.css" as="style"><link rel="preload" href="/notebook/assets/js/app.f95c8d67.js" as="script"><link rel="preload" href="/notebook/assets/js/2.09832bb8.js" as="script"><link rel="preload" href="/notebook/assets/js/18.fea93345.js" as="script"><link rel="prefetch" href="/notebook/assets/js/10.47f16607.js"><link rel="prefetch" href="/notebook/assets/js/11.df9561e0.js"><link rel="prefetch" href="/notebook/assets/js/12.4abdda40.js"><link rel="prefetch" href="/notebook/assets/js/13.a12941b3.js"><link rel="prefetch" href="/notebook/assets/js/14.311b74c1.js"><link rel="prefetch" href="/notebook/assets/js/15.0a87671a.js"><link rel="prefetch" href="/notebook/assets/js/16.1e90e3ab.js"><link rel="prefetch" href="/notebook/assets/js/17.0e7f48ef.js"><link rel="prefetch" href="/notebook/assets/js/19.fe513a27.js"><link rel="prefetch" href="/notebook/assets/js/20.e167f67c.js"><link rel="prefetch" href="/notebook/assets/js/21.3bbf8f09.js"><link rel="prefetch" href="/notebook/assets/js/22.139473d9.js"><link rel="prefetch" href="/notebook/assets/js/23.10b902b9.js"><link rel="prefetch" href="/notebook/assets/js/3.fceedff4.js"><link rel="prefetch" href="/notebook/assets/js/4.779e3c9b.js"><link rel="prefetch" href="/notebook/assets/js/5.5b45f7ce.js"><link rel="prefetch" href="/notebook/assets/js/6.cb205ea4.js"><link rel="prefetch" href="/notebook/assets/js/7.22950914.js"><link rel="prefetch" href="/notebook/assets/js/8.08cee8b7.js"><link rel="prefetch" href="/notebook/assets/js/9.3738fea4.js">
+    <link rel="stylesheet" href="/notebook/assets/css/0.styles.254e6a27.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/notebook/" class="home-link router-link-active"><!----> <span class="site-name">theydy</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/notebook/interview/" class="nav-link router-link-active">
+  前端面试
+</a></div><div class="nav-item"><a href="/notebook/vue/" class="nav-link">
+  Vue
+</a></div><div class="nav-item"><a href="/notebook/react/" class="nav-link">
+  React
+</a></div><div class="nav-item"><a href="/notebook/webpack/" class="nav-link">
+  Webpack
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="杂七杂八" class="dropdown-title"><span class="title">杂七杂八</span> <span class="arrow down"></span></button> <button type="button" aria-label="杂七杂八" class="mobile-dropdown-title"><span class="title">杂七杂八</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/notebook/other/typescript/" class="nav-link">
+  TypeScript
+</a></li><li class="dropdown-item"><!----> <a href="/notebook/other/node/" class="nav-link">
+  Node
+</a></li><li class="dropdown-item"><!----> <a href="/notebook/other/babel/" class="nav-link">
+  babel
+</a></li><li class="dropdown-item"><!----> <a href="/notebook/other/snippets/" class="nav-link">
+  snippets
+</a></li><li class="dropdown-item"><!----> <a href="/notebook/other/git/" class="nav-link">
+  Git
+</a></li></ul></div></div> <a href="https://github.com/theydy/notebook" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Github
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/notebook/interview/" class="nav-link router-link-active">
+  前端面试
+</a></div><div class="nav-item"><a href="/notebook/vue/" class="nav-link">
+  Vue
+</a></div><div class="nav-item"><a href="/notebook/react/" class="nav-link">
+  React
+</a></div><div class="nav-item"><a href="/notebook/webpack/" class="nav-link">
+  Webpack
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="杂七杂八" class="dropdown-title"><span class="title">杂七杂八</span> <span class="arrow down"></span></button> <button type="button" aria-label="杂七杂八" class="mobile-dropdown-title"><span class="title">杂七杂八</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/notebook/other/typescript/" class="nav-link">
+  TypeScript
+</a></li><li class="dropdown-item"><!----> <a href="/notebook/other/node/" class="nav-link">
+  Node
+</a></li><li class="dropdown-item"><!----> <a href="/notebook/other/babel/" class="nav-link">
+  babel
+</a></li><li class="dropdown-item"><!----> <a href="/notebook/other/snippets/" class="nav-link">
+  snippets
+</a></li><li class="dropdown-item"><!----> <a href="/notebook/other/git/" class="nav-link">
+  Git
+</a></li></ul></div></div> <a href="https://github.com/theydy/notebook" target="_blank" rel="noopener noreferrer" class="repo-link">
+    Github
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>前端面试</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/notebook/interview/js.html" class="sidebar-link">javascript 基础</a></li><li><a href="/notebook/interview/css.html" class="sidebar-link">css</a></li><li><a href="/notebook/interview/code.html" class="sidebar-link">各种手写题</a></li><li><a href="/notebook/interview/browser.html" class="sidebar-link">浏览器相关</a></li><li><a href="/notebook/interview/http.html" class="sidebar-link">HTTP 相关</a></li><li><a href="/notebook/interview/vue.html" aria-current="page" class="active sidebar-link">vue 面试题</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/notebook/interview/vue.html#数据双向绑定" class="sidebar-link">数据双向绑定</a></li><li class="sidebar-sub-header"><a href="/notebook/interview/vue.html#响应式原理" class="sidebar-link">响应式原理</a></li><li class="sidebar-sub-header"><a href="/notebook/interview/vue.html#keep-alive-原理" class="sidebar-link">keep-alive 原理</a></li><li class="sidebar-sub-header"><a href="/notebook/interview/vue.html#生命周期、父子生命周期顺序" class="sidebar-link">生命周期、父子生命周期顺序</a></li><li class="sidebar-sub-header"><a href="/notebook/interview/vue.html#父子传参方式" class="sidebar-link">父子传参方式</a></li><li class="sidebar-sub-header"><a href="/notebook/interview/vue.html#vue3-的不同" class="sidebar-link">vue3 的不同</a></li><li class="sidebar-sub-header"><a href="/notebook/interview/vue.html#name-属性用处" class="sidebar-link">name 属性用处</a></li><li class="sidebar-sub-header"><a href="/notebook/interview/vue.html#nexttick-原理" class="sidebar-link">nextTick 原理</a></li></ul></li><li><a href="/notebook/interview/safety.html" class="sidebar-link">前端安全</a></li><li><a href="/notebook/interview/webpack.html" class="sidebar-link">webpack</a></li><li><a href="/notebook/interview/optimization.html" class="sidebar-link">性能优化</a></li><li><a href="/notebook/interview/algorithm.html" class="sidebar-link">算法</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="vue-面试题"><a href="#vue-面试题" class="header-anchor">#</a> vue 面试题</h1> <h2 id="数据双向绑定"><a href="#数据双向绑定" class="header-anchor">#</a> 数据双向绑定</h2> <h2 id="响应式原理"><a href="#响应式原理" class="header-anchor">#</a> 响应式原理</h2> <h2 id="keep-alive-原理"><a href="#keep-alive-原理" class="header-anchor">#</a> keep-alive 原理</h2> <h2 id="生命周期、父子生命周期顺序"><a href="#生命周期、父子生命周期顺序" class="header-anchor">#</a> 生命周期、父子生命周期顺序</h2> <h2 id="父子传参方式"><a href="#父子传参方式" class="header-anchor">#</a> 父子传参方式</h2> <h2 id="vue3-的不同"><a href="#vue3-的不同" class="header-anchor">#</a> vue3 的不同</h2> <h2 id="name-属性用处"><a href="#name-属性用处" class="header-anchor">#</a> name 属性用处</h2> <h2 id="nexttick-原理"><a href="#nexttick-原理" class="header-anchor">#</a> nextTick 原理</h2></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新时间:</span> <span class="time">6/27/2021, 2:38:27 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/notebook/interview/http.html" class="prev">
+        HTTP 相关
+      </a></span> <span class="next"><a href="/notebook/interview/safety.html">
+        前端安全
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/notebook/assets/js/app.f95c8d67.js" defer></script><script src="/notebook/assets/js/2.09832bb8.js" defer></script><script src="/notebook/assets/js/18.fea93345.js" defer></script>
+  </body>
+</html>
