@@ -11,7 +11,7 @@ parse 阶段的目的是把源码字符串转换成机器能够理解的 AST，�
 之后要把 token 进行递归的组装，生成 AST，这个过程是语法分析，按照不同的语法结构，来把一组单词组合成对象。
 
 <div style="text-align: center">
-  <img src="../../images/babel-plugin-1.png" />
+  <img src="../images/babel-plugin-1.png" />
 </div>
 
 ## transform
@@ -124,7 +124,7 @@ traverse(ast, {
     - path.stop 结束后续遍历
 
     <div style="text-align: center">
-      <img src="../../images/babel-plugin-2.png" />
+      <img src="../images/babel-plugin-2.png" />
     </div>
 
 - state：遍历过程中在不同节点之间传递数据的机制，插件会通过 state 传递 options 和 file 信息，我们也可以通过 state 存储一些遍历过程中的共享数据。

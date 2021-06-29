@@ -1,12 +1,8 @@
----
-sidebar: auto
----
-
 # Git
 
 ## 常用 Git 操作
 
-```shell
+```sh
 # 将某个分支上的 commit 摘取出来提交到当前分支, -x -s 可选参数，带上 hash 和签名信息
 git cherry-pick [-x] [-s] xxx
 
@@ -14,7 +10,7 @@ git cherry-pick [-x] [-s] xxx
 git cherry-pick A^..B
 ```
 
-```shell
+```sh
 # 通过再次 commit 相反的内容抵消一次 commit
 git revert xxx
 
@@ -22,7 +18,7 @@ git revert xxx
 git revert xxx -m 1
 ```
 
-```shell
+```sh
 # 查看 git 操作记录，然后可以通过 reset —hard HEAD@{n} 来返回到第 n 步时的状态
 git reflog
 
@@ -30,7 +26,7 @@ git reflog
 git reset --soft xxx
 ```
 
-```shell
+```sh
 # 合并多个提交 n 要大于等于要修改的commit 距离 HEAD 的步数
 git rebase -i HEAD~n
 
@@ -44,7 +40,7 @@ git merge xxx —no-ff
 git merge xxx -Xignore-all-space
 ```
 
-```shell
+```sh
 # 没有在 git 版本控制中的文件，是不能被 git stash 存起来的, 需要先 git add . 添加到 git 版本控制中
 git stash save ‘save message’
 
@@ -175,7 +171,7 @@ jobs:
 
 需要赋予 git hook 钩子权限 `chmod 700 .git/hooks/pre-commit`
 
-```shell
+```sh
 #!/bin/sh
 target_name="theydy"
 target_email="ydythebs@qq.com"

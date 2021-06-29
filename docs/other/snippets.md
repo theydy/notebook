@@ -1,7 +1,3 @@
----
-sidebar: auto
----
-
 # snippets
 
 ## axios 使用封装
@@ -454,7 +450,7 @@ email2
 
 ```
 
-```shell
+```sh
 #!/bin/sh
 
 setGitConfig(){
@@ -503,4 +499,138 @@ git config --global user.email
 sleep 3s
 
 exit 0
+```
+
+## 提取 .vue 文件中的非 scoped 的 css
+
+```js
+var compiler = require('@vue/compiler-dom');
+var path = require('path');
+var fs = require('fs');
+
+// 读取目标文件夹下的所有文件地址
+var getAllFiles = function (targetList, regExp) {
+  var result = [];
+
+  while(targetList.length) {
+    var target =  targetList.shift();
+
+    // 读取目录的内容
+    var files = fs.readdirSync(target);
+
+    files.map((file) => {
+      var fullpath = path.resolve(target, file);
+
+      // 获取文件状态信息？
+      var stat = fs.statSync(fullpath);
+
+      if (stat.isDirectory()) {
+        targetList.push(fullpath);
+      } else if (!regExp || (regExp && regExp.test(fullpath))) {
+        result.push(fullpath);
+      }
+    })
+  }
+
+  return result;
+}
+
+// 获取 vue 文件中的指定块
+var getTagContent = function (file, fn) {
+  var result = [];
+  var content = getFileContent(file);
+  // 获取 ast
+  var ast;
+
+  try {
+    ast = compiler.parse(content);
+  } catch (err) {
+    console.log(file, err);
+    return;
+  }
+
+  ast && ast.children && ast.children.map((node) => {
+    if (fn(node, ast, file)) {
+      result.push(node.loc.source);
+    }
+  })
+
+  return result;
+}
+
+// 读取文件内容
+var getFileContent = function (file) {
+  // 读取文件 buffer 转为字符串
+  return fs.readFileSync(file).toString();
+}
+
+// 输出内容
+var emitAssets = function (output, content, flag = 'a+') {
+  // 写入文件。
+  fs.writeFile(output, content, { flag }, err => {
+    if (err) {
+      console.error(err)
+      return
+    }
+  });
+}
+
+// 删除指定文件
+var deleteFile = function(file) {
+  if (fs.existsSync(file)) {
+    fs.unlinkSync(file);
+  }
+}
+
+
+
+function run() {
+  var targetFileRex = /.*\.vue$/g;
+  var output = path.resolve(__dirname, 'common-style.less');
+
+  var list = getAllFiles([
+    path.resolve(__dirname, 'src'),
+  ], targetFileRex);
+
+  var scopedList = [];
+
+  list.map((file) => {
+    var result = getTagContent(file, (node) => {
+      return node.tag === 'style' && node.props.every(prop => prop.name !== 'scoped');
+    });
+
+    result.length && scopedList.push({
+      file,
+      data: result,
+    });
+
+    // 删除原本文件中的 less 块。
+    var content = getFileContent(file);
+
+    result.map(scope => {
+      content = content.replace(scope, '');
+    });
+
+    emitAssets(file, content, 'w');
+  });
+
+  deleteFile(output);
+
+  // 输出
+  scopedList.map(({file, data}) => {
+
+    var content = '';
+
+    content += `// ${file}\n\n`;
+    data.map(scope => {
+      content += `${scope}\n\n`;
+    })
+
+    emitAssets(output, content);
+  })
+
+}
+
+// test
+run();
 ```

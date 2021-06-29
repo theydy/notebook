@@ -1,7 +1,7 @@
 const nav = [
   {
     text: '前端面试',
-    link: '/interview/'
+    link: '/interview/js'
   },
   {
     text: 'Vue',
@@ -17,28 +17,7 @@ const nav = [
   },
   {
     text: '杂七杂八',
-    items: [
-      {
-        text: 'TypeScript',
-        link: '/other/typescript/'
-      },
-      {
-        text: 'Node',
-        link: '/other/node/'
-      },
-      {
-        text: 'babel',
-        link: '/other/babel/'
-      },
-      {
-        text: 'snippets',
-        link: '/other/snippets/'
-      },
-      {
-        text: 'Git',
-        link: '/other/git/'
-      }
-    ]
+    link: '/other/tools'
   }
 ]
 

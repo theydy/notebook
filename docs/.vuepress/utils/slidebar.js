@@ -43,10 +43,15 @@ const reactSidebar = [
 
 const otherSideBar = [
   {
-    title: 'babel',
+    title: '杂七杂八',
     collapsable: false,
     children: [
-      'babel/babel-plugin',
+      'tools',
+      'git',
+      'node',
+      'typescript',
+      'snippets',
+      'babel-plugin',
     ],
   },
   // {
