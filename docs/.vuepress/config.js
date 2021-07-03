@@ -9,7 +9,7 @@ const {
 
 module.exports = {
   title: 'theydy',
-  description: 'theydy 的个人博客',
+  description: '读书笔记 + 知识整理',
   base: '/notebook/',
   head: [
     ['link', { rel: 'icon', href: '/icon.png' }]
