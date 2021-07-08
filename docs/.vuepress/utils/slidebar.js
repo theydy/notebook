@@ -29,7 +29,10 @@ const vueSidebar = [
   {
     title: 'vue',
     collapsable: false,
-    children: []
+    children: [
+      'analysis',
+      'other',
+    ]
   },
 ]
 

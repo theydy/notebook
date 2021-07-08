@@ -5,7 +5,7 @@ const nav = [
   },
   {
     text: 'Vue',
-    link: '/vue/'
+    link: '/vue/analysis'
   },
   {
     text: 'React',
