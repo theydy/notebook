@@ -285,11 +285,11 @@ add(1, 2, 3, 4, 5, 6, 7).then(res => {
 
 ## generator
 
-`generator` 函数调用时不会立即执行，而是会生成一个生成器对象。
+`generator` 函数调用时不会立即执行，而是会生成一个迭代器对象。
 
-每当调用生成器对象的 `next` 方法时，函数运行到下一个 `yield` 表达式。
+每当调用迭代器对象的 `next` 方法时，函数运行到下一个 `yield` 表达式。
 
-返回表达式结果并暂停自身，当抵达生成器函数的末尾时，返回结果中 done 的值为 true，value 的值为 undefined。
+返回表达式结果并暂停自身，返回值是一个 done、value 的对象。当抵达函数的末尾时，返回结果中 done 的值为 true，value 的值为 undefined。
 
 ### 简单使用
 
@@ -310,3 +310,50 @@ iter.next(); //{value:undefined，done:true}
 ### es 5 中的实现
 
 **编译器会生成一个内部类来保存上下文信息，然后将 yield return 表达式转换成 switch case，通过状态机模式实现 yield 关键字的特性。**
+
+```js
+
+function gen$(context) {
+  while (1) {
+    switch (context.prev = context.next) {
+      case 0:
+        context.next = 2;
+        return 'result1';
+
+      case 2:
+        context.next = 4;
+        return 'result2';
+
+      case 4:
+        context.next = 6;
+        return 'result3';
+
+      case 6:
+        context.done = true;
+        return undefined
+    }
+  }
+}
+
+let foo = function() {
+  let context = {
+    prev:0,
+    next:0,
+    done: false,
+  }
+  return {
+    next: function() {
+      let value = gen$(context);
+      return {
+        value,
+        done: context.done,
+      }
+    }
+  }
+}
+
+// test 
+let a = foo();
+a.next() // { value: result1, done: false }
+a.next() // { value: result2, done: false }
+```

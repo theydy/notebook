@@ -188,3 +188,18 @@ HTTP 2 后，加入二进制分帧传输，每个请求被拆成最小单位帧�
 ### QUIC
 
 HTTP 3 基于 QUIC 实现，QUIC 通过 UDP 修改而成
+
+## websocket
+
+websocket 连接过程
+
+客户端发送请求，header 中包含如下字段
+
+```md
+Upgrade: websocket
+Connection: Upgrade
+```
+
+服务端返回状态码 101 响应
+
+连接建立完成，后续使用 websocket 通信。

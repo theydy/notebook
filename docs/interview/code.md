@@ -347,37 +347,92 @@ function create(prototype) {
 ## 实现 Vue 数据响应式
 
 ```js
+class Dep {
+  constructor() {
+    this.subs = new Set();
+  }
+
+  depend() {
+    this.subs.add(Dep.target);
+  }
+
+  notify() {
+    [...this.subs].map(watcher => watcher.update());
+  }
+}
+Dep.target = null;
+
+class Observer {
+  constructor(obj) {
+    this.dep = new Dep();
+
+    if (Array.isArray(obj)) {
+      obj.map(val => observe(val));
+    } else {
+      this.walk(obj);
+    }
+  }
+
+  walk(obj) {
+    Object.keys(obj).map(key => {
+      defineReactive(obj, key, obj[key])
+    })
+  }
+}
+
+class Watcher {
+  constructor(get) {
+    this.getter = get;
+    this.get();
+  }
+
+  get() {
+    Dep.target = this;
+    this.getter();
+    Dep.target = null;
+  }
+
+  update() {
+    this.get();
+  }
+}
 
 function observe (obj) {
   if (typeof obj !== 'object' || obj === null) return;
-  if (obj.__ob__) return;
+  if (obj.__ob__) return obj.__ob__;
 
-  obj.__ob__ = true;
-  Object.keys(obj).map(key => {
-    defineReactive(obj, key, obj[key])
-  })
+  obj.__ob__ = new Observer(obj);
+  return obj.__ob__;
 }
 
 function defineReactive (target, key, val) {
-  observe(val);
+  let childOb = observe(val);
+  let dep = new Dep();
 
   Object.defineProperty(target, key, {
     enumerable: true,
     configurable: true,
     get() {
+      if (Dep.target) {
+        dep.depend();
+        if (childOb) {
+          childOb.depend();
+        }
+      }
       console.log('get value');
       return val;
     },
     set(nv) {
-      observe(nv);
+      childOb = observe(nv);
       val = nv;
+      dep.notify();
       console.log('change value')
     }
   })
 }
 
 // test 
-const obj = {
+let obj = {
   name: 'AAA',
   age: 23,
   job: {
@@ -387,10 +442,12 @@ const obj = {
 };
 
 observe(obj);
-const name = obj.name;
-obj.name = 'BBB';
-const jobName = obj.job.name;
-obj.job.name = 'fe';
+
+new Watcher(() => {
+  return obj.name;
+})
+
+obj.name = '111';
+
+obj.job.name = 'eee';
 ```
-
-

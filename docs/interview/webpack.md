@@ -70,3 +70,11 @@ webpack 的构建流程。
 服务端和客户端会建立 websocket 连接，当 webpack 监听到文件被修改，触发了重新编译，编译完成后在 done 钩子中通过 websocket 向客户端推动当前编译的 hash，如果客户端比较 hash 不一致，就会通过 ajax 和 jsonp 向服务端获取最新的资源完成替换。
 
 所以一般来说 webpack-dev-server 和 HMR 要配对使用，否则会无效，如果使用了 webpack-dev-middleware 而没有使用 webpack-dev-server，请使用 webpack-hot-middleware 依赖包开启 HMR。
+
+## tree shaking 原理
+
+tree shaking 是 webpack 的一项功能，tree shaking 只能在 ESModule 中使用，如果先通过 babel 转为 CommonJS 就用不了。
+
+ES6 模块依赖关系是确定的，和运行时的状态无关，可以进行可靠的静态分析，在编译阶段分析出引入但是没用的模块，不打包到 boundle 里。
+
+要使用这项技术，只能使用 webpack 的模块处理，加上 babel 的 es6 转换能力（需要关闭模块转换）。
