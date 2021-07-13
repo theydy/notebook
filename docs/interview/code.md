@@ -171,8 +171,8 @@ function quickSort(list, left, right) {
     }
 
     if (l < r) {
-      list[l] = list[r];
-      list[r] = target;
+      list[r] = list[l];
+      list[l] = target;
     }
   }
 
