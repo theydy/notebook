@@ -38,7 +38,7 @@ function MyPromise(fn) {
 
 MyPromise.prototype.then = function(onResolved, onRejected) {
   if (this.state === 'resolved') {
-    return new Promise((resolve, reject) => {
+    return new MyPromise((resolve, reject) => {
       setTimeout(() => {
         const res = onResolved(this.value);
         if (res instanceof MyPromise) {
@@ -51,7 +51,7 @@ MyPromise.prototype.then = function(onResolved, onRejected) {
   }
 
   if (this.state === 'rejected') {
-    return new Promise((resolve, reject) => {
+    return new MyPromise((resolve, reject) => {
       setTimeout(() => {
         const res = onRejected(this.value);
         if (res instanceof MyPromise) {
@@ -64,7 +64,7 @@ MyPromise.prototype.then = function(onResolved, onRejected) {
   }
 
   if (this.state === 'pending') {
-    return new Promise((resolve, reject) => {
+    return new MyPromise((resolve, reject) => {
       this.resolvedCbs.push((data) => {
         const res = onResolved(data);
         if (res instanceof MyPromise) {
@@ -416,7 +416,7 @@ function defineReactive (target, key, val) {
       if (Dep.target) {
         dep.depend();
         if (childOb) {
-          childOb.depend();
+          childOb.dep.depend();
         }
       }
       console.log('get value');
