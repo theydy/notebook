@@ -12,7 +12,29 @@
 
 ## vue3 的不同
 
+### Proxy
+
+vue2 中使用 `Object.defineProperty` 实现数据的响应式，在 vue3 中改为 `Proxy` 实现。
+
+`Object.defineProperty` 的问题有如下：
+
+- 只能监听已存在的属性，不能监听新增和删除的属性
+- 必须遍历对象的每个属性
+- 必须深层遍历嵌套的对象
+
+`Object.defineProperty` 是针对对象某个属性的操作，而 `Proxy` 则是针对整个对象的操作
+
+`Proxy` 的用法如下
+
+[MDN Proxy 文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy)
+
+```js
+var p = new Proxy(target, handler);
+```
+
 ## name 属性用处
+
+递归调用自身
 
 ## nextTick 原理
 
@@ -139,3 +161,38 @@ VueRouter.install = function (v) {
 
 export default VueRouter
 ```
+
+## Virtual DOM
+
+[尤雨溪回答](https://www.zhihu.com/question/31809713/answer/53544875)
+
+[面试官问: 如何理解Virtual DOM？](https://juejin.cn/post/6844903921442422791?utm_source=gold_browser_extension#heading-0)
+
+Virtual DOM 并不能保证比直接操作 DOM 快，这个快慢和界面的大小和数据的变化量有关，但是 Virtual DOM 能够保证不管数据变化多少，每次重绘的性能都可以接受。
+
+操作 DOM 方案：总渲染时间 = 渲染 DOM 节点的时间
+
+Virtual DOM 方案：总渲染时间 = diff 时间 + 渲染 DOM 节点时间
+
+Virtual DOM 真正的价值从来都不是性能，而是它
+
+- 为函数式的 UI 编程方式打开了大门
+- 可以渲染到 DOM 以外的 backend，更好的跨平台
+
+所以总结来说用 Virtual DOM 是因为：
+
+- Virtual DOM 减少了频繁的操作原生 DOM，并且避免程序员操作 DOM 带来的差异性
+- diff 过程中将 DOM 的比对操作放在 JS 层，减少浏览器不必要的重绘，提高效率
+- 为函数式的 UI 编程方式打开了大门
+- 可以渲染到 DOM 以外的 backend，更好的跨平台
+
+## Vue 的 diff 算法
+
+[diff 算法部分](https://github.com/theydy/notebook/issues/27)
+
+
+简单说就是
+
+- 过滤 oldCh 两侧的空 VNode
+- 旧头节点和新头节点、旧尾节点和新尾节点、旧头节点和新尾节点、旧尾节点和新头节点做比较
+- 否则将剩余旧头节点至尾节点的元素生成一个 map 表，然后判断新节点的 key 是否命中

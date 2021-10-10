@@ -35,3 +35,15 @@ open ~/.zshrc
 # 使配置生效
 source ~/.zshrc
 ```
+
+## 在线辅助工具
+
+[ast explorer](https://astexplorer.net/)
+
+[vue2 vue-compiler-online](https://magiccwl.github.io/vue-compiler-online/)
+
+[vue3 vue-compiler-online](https://vue-next-template-explorer.netlify.app/)
+
+[typescript playground](https://www.typescriptlang.org/play?#code/Q)
+
+[websocket 在线测试](http://www.websocket-test.com/)

@@ -4,7 +4,7 @@ lang: zh-CN
 heroText: 觅之自有所获
 heroImage: /logo.jpg
 actionText: 开始 →
-actionLink: /interview/
+actionLink: /interview/js
 features:
 - title: A Blog
   details: 记录读书笔记 + 知识整理
