@@ -451,3 +451,54 @@ obj.name = '111';
 
 obj.job.name = 'eee';
 ```
+
+## 虚拟 Dom 转为真实 Dom
+
+```js
+let template = {
+  tag: 'DIV',
+  attrs:{
+  id:'app'
+  },
+  children: [
+    {
+      tag: 'SPAN',
+      children: [
+        { tag: 'A', children: [123] }
+      ]
+    },
+    {
+      tag: 'SPAN',
+      children: [
+        { tag: 'A', children: ['abcd'] },
+        { tag: 'A', children: [] }
+      ]
+    }
+  ]
+}
+
+function _render(vnode) {
+  if (typeof vnode === 'number' || typeof vnode === 'string') {
+    return document.createTextNode(vnode);
+  }
+
+  let dom = document.createElement(vnode.tag);
+
+  if (vnode.attrs) {
+    Object.keys(vnode.attrs).map(attr => {
+      dom.setAttribute(attr, vnode.attrs[attr]);
+    })
+  }
+
+  if (vnode.children && vnode.children.length) {
+    vnode.children.map(child => {
+      dom.appendChild(_render(child));
+    })
+  }
+
+  return dom;
+}
+
+// test
+_render(template);
+```

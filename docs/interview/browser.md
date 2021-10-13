@@ -29,9 +29,9 @@ v8 把堆内存分为新生代和老生代，两边执行的垃圾回收算法�
 - DNS 解析：浏览器缓存 -> 本地缓存 -> 路由缓存 -> 网络提供商的 DNS 服务器 -> 根服务器 的顺序查找域名对应的 IP 地址，查找 DNS 的请求大部分情况下使用 UDP 协议传输数据
 - 建立 TCP 连接：三次握手
 - 发送请求，服务器响应请求
-- 浏览器接受到请求，HTML → DOM 树、CSS → CSSOM 树，结合 DOM 树和 CSSOM 树 → 渲染树（Javascript 的执行会阻塞 DOM 树的构建、构建 CSSOM 树会阻塞 Javascript 的执行）
-- 布局
-- 绘制
+- 浏览器接受到请求，HTML → DOM 树、CSS → CSSOM 树，结合 DOM 树和 CSSOM 树 → 布局树（Javascript 的执行会阻塞 DOM 树的构建、构建 CSSOM 树会阻塞 Javascript 的执行）
+- 建立图层树
+- 生成绘制列表、生成图块并栅格化、显示器显示内容
 - 断开 TCP 连接：四次挥手
 
 ## 跨域
