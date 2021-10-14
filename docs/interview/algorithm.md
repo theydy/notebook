@@ -216,7 +216,6 @@ minSubArrayLen(7, [2,3,1,2,4,3]);
 [LeetCode](https://leetcode-cn.com/problems/longest-common-prefix/submissions/)
 
 ```js
-
 function longestCommonPrefix(strs) {
   let target = strs[0];
   
@@ -238,4 +237,114 @@ function longestCommonPrefix(strs) {
 //test
 longestCommonPrefix(["flower","flow","flight"]);
 
+```
+
+### 415. 字符串相加
+
+[LeetCode](https://leetcode-cn.com/problems/add-strings/)
+
+```js
+var addStrings = function(num1, num2) {
+  let len = Math.max(num1.length, num2.length);
+  let nl1 = num1.padStart(len, '0');
+  let nl2 = num2.padStart(len, '0');
+  let res = [];
+  let flag = 0;
+  for(let i = len - 1; i >=0; i--) {
+    let b = parseInt(nl1[i]) + parseInt(nl2[i]) + flag;
+
+    res.push(String(b % 10));
+    flag = b >= 10 ? 1 : 0;
+  }
+  if (flag) res.push('1');
+
+  return res.reverse().join('');
+};
+```
+
+## 多数和问题
+
+这类问题有两数和、三数和到 n 数和，n 数合通用解法就是先排序，然后 n-2 个数必须 for 套 for，最后 2 个数用双向指针。
+
+### 1. 两数之和
+
+[LeetCode](https://leetcode-cn.com/problems/two-sum/)
+
+```js
+var twoSum = function(nums, target) {
+  let map = new Map();
+
+  for(let i = 0; i < nums.length; i++) {
+    let c = nums[i];
+    let w = target - c;
+
+    if (map.has(w)) {
+      return [map.get(w), i]; 
+    }
+
+    map.set(c, i);
+  }
+
+};
+```
+
+### 167. 两数之和 II - 输入有序数组
+
+[LeetCode](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)
+
+```js
+var twoSum = function(numbers, target) {
+  let l = 0;
+  let r = numbers.length - 1;
+  while(l < r) {
+    if (numbers[l] + numbers[r] === target) {
+      return [l + 1, r + 1]; // 题目要求下标从 1 开始
+    } else if (numbers[l] + numbers[r] > target) {
+      r--;
+    } else {
+      l++;
+    }
+  }
+};
+```
+
+### 15. 三数之和
+
+[LeetCode](https://leetcode-cn.com/problems/3sum/)
+
+```js
+var threeSum = function(nums) {
+  let ans = [];
+
+  nums.sort((a, b) => a - b) // [-4, -1, -1, 0, 1, 2]
+
+  for(let i = 0; i < nums.length - 2; i++) {
+    let l = i + 1;
+    let r = nums.length - 1;
+    
+    if (nums[i] === nums[i - 1]) continue;
+
+    while(l < r) {
+      let a = nums[l];
+      let b =  nums[r];
+      if (nums[i] + a + b === 0) {
+        ans.push([nums[i], a, b]);
+
+        while(nums[l] === a) {
+          l++
+        }
+
+        while(nums[r] === b) {
+          r--;
+        }
+      } else if (nums[i] + a + b > 0) {
+        r--;
+      } else {
+        l++;
+      }
+    }
+  }
+
+  return ans;
+};
 ```
