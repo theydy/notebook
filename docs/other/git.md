@@ -189,3 +189,10 @@ else
   exit 1
 fi
 ```
+
+### 仓库单独设置 config
+
+```sh
+git config user.name "xxx"
+git config user.email "xxx@yy.com"
+```
