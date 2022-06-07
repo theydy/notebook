@@ -5,6 +5,7 @@ const {
   vueSidebar,
   reactSidebar,
   otherSideBar,
+  engineeringSideBar,
  } = require('./utils/slidebar.js');
 
 module.exports = {
@@ -30,6 +31,7 @@ module.exports = {
       '/vue/': vueSidebar,
       '/react/': reactSidebar,
       '/other/': otherSideBar,
+      '/engineering/': engineeringSideBar,
     }
   },
   configureWebpack: {

@@ -95,9 +95,9 @@ Function.prototype.myCall = function (context, ...args) {
   const key = Symbol();
   
   context[key] = fn;
-  const result = context[key](...args);
+  const res = context[key](...args);
   delete context[key];
-  return result;
+  return res;
 }
 
 Function.prototype.myApply = function (context, args) {
@@ -105,16 +105,20 @@ Function.prototype.myApply = function (context, args) {
   const key = Symbol();
   
   context[key] = fn;
-  const result = context[key](...args);
+  const res = context[key](...args);
   delete context[key];
-  return result;
+  return res;
 }
 
 Function.prototype.myBind = function (context, ...args) {
   const fn = this;
   
-  return function(...lastArgs) {
-    return fn.myApply(context, [...args, ...lastArgs]);
+  return function (...last) {
+    const key = Symbol();
+    context[key] = fn;
+    const res = context[key](...args, ...last);
+    delete context[key];
+    return res;
   }
 }
 ```
@@ -206,8 +210,11 @@ function debounce (delay, fn) {
   return function(...args) {
     let self = this;
     timer && clearTimeout(timer);
+    !timer && fn.call(self, ...args);
+
     timer = setTimeout(() => {
       fn.call(self, ...args);
+      timer = 0;
     }, delay);
   }
 }
@@ -310,14 +317,11 @@ class EventEmitter {
   }
 
   off(type, cb) {
-    const events = this.events[type] || [];
-    const index = events.findIndex(item => item === cb);
-
-    index > -1 && events.splice(index, 1);
+    this.events[type] = this.events[type].filter(c => cb !== c)
   }
 
   emit(type, ...args) {
-    (this.events[type] || []).map(cb => cb(...args));
+    this.events[type].map(cb => cb(...args));
   }
 }
 ```
@@ -502,3 +506,315 @@ function _render(vnode) {
 // test
 _render(template);
 ```
+
+## 通过字符串获取对对象属性
+
+```js
+function getValue(obj, pathStr) {
+  const path = pathStr.split('.')
+  let key
+  while(key = path.shift()) {
+    if (typeof obj === 'object' && obj !== null) {
+      obj = obj[key]
+    } else {
+      return undefined
+    }
+  }
+
+  return obj
+}
+```
+
+## 字符串模板替换
+
+```js
+function getParams(temp) {
+  let t = temp
+  let reg = /\{\{.*?\}\}/ig
+  return t.match(reg)
+}
+
+function getValue(obj, pathStr) {
+  const path = pathStr.match(/\{\{(.*?)\}\}/i)[1].trim().split('.')
+  let key
+  while(key = path.shift()) {
+    if (typeof obj === 'object' && obj !== null) {
+      obj = obj[key]
+    } else {
+      return undefined
+    }
+  }
+
+  return obj
+}
+
+function template(temp, ...args) {
+  const params = getParams(temp)
+  let param
+  while(param = params.shift()) {
+    temp = temp.replace(param, getValue({...args}, param))
+  }
+
+  return temp
+}
+
+// test
+let obj = {
+  a: {
+    b: '222',
+    c: '333',
+  }
+}
+let test = 'hello {{ obj.a.b }} !!!, {{ obj.a.c }} {{ obj.a.c }}'
+template(test, obj) // hello 222 !!!, 333
+
+```
+
+## 请求失败重复发送
+
+```js
+function replyPromise(fn, count) {
+  return new Promise(async (resolve, reject) => {
+    while(count) {
+      try {
+        let res = await new Promise(fn)
+        resolve(res)
+      } catch (e) {
+        count--
+        if (count) {
+          console.log('repo')
+        } else {
+          reject(e)
+        }
+      }
+    }
+  })
+}
+
+// test
+let fn = (resolve, reject) => {
+  setTimeout(() => {
+    reject('error')
+  }, 500)
+}
+replyPromise(fn, 3).catch(e => console.log(e))
+```
+
+## 实现简单路由
+
+```js
+// hash路由
+class Route{
+  constructor(){
+    // 路由存储对象
+    this.routes = {}
+    // 当前hash
+    this.currentHash = ''
+    // 绑定this，避免监听时this指向改变
+    this.freshRoute = this.freshRoute.bind(this)
+    // 监听
+    window.addEventListener('load', this.freshRoute)
+    window.addEventListener('hashchange', this.freshRoute)
+  }
+  // 存储
+  storeRoute (path, cb) {
+    this.routes[path] = cb || function () {}
+  }
+  // 更新
+  freshRoute () {
+    this.currentHash = location.hash.slice(1) || '/'
+    this.routes[this.currentHash]()
+  }
+}
+```
+
+## 代码输出题
+
+### 异步 & 事件循环
+
+```js
+const promise = new Promise((resolve, reject) => {
+  console.log(1);
+  console.log(2);
+});
+
+promise.then(() => {
+  console.log(3);
+});
+console.log(4);
+
+// 1 2 4
+// 注意没有调用 resolve 走不到 then
+```
+
+```js
+const promise1 = new Promise((resolve, reject) => {
+  console.log('promise1')
+  resolve('resolve1')
+})
+const promise2 = promise1.then(res => {
+  console.log(res)
+})
+console.log('1', promise1);
+console.log('2', promise2);
+
+// promise1
+// 1 Promise{<resolved>: resolve1}
+// 2 Promise{<pending>}
+// resolve1
+```
+
+```js
+const promise = new Promise((resolve, reject) => {
+  console.log(1);
+  setTimeout(() => {
+    console.log("timerStart");
+    resolve("success");
+    console.log("timerEnd");
+  }, 0);
+  console.log(2);
+});
+promise.then((res) => {
+  console.log(res);
+});
+console.log(4);
+
+// 1 2 4
+// timerStart timerEnd success
+```
+
+```js
+Promise.resolve().then(() => {
+  console.log('promise1');
+  const timer2 = setTimeout(() => {
+    console.log('timer2')
+  }, 0)
+});
+const timer1 = setTimeout(() => {
+  console.log('timer1')
+  Promise.resolve().then(() => {
+    console.log('promise2')
+  })
+}, 0)
+console.log('start');
+
+// start promise1 timer1 promise2 timer2
+```
+
+```js
+Promise.resolve().then(() => {
+  return new Error('error!!!')
+}).then(res => {
+  console.log("then: ", res)
+}).catch(err => {
+  console.log("catch: ", err)
+})
+
+// "then: " "Error: error!!!"
+// 返回任意一个非 promise 的值都会被包裹成 promise 对象，因此这里的 return new Error('error!!!')
+// 也被包裹成了 return Promise.resolve(new Error('error!!!'))，因此它会被 then 捕获而不是 catch。
+```
+
+```js
+async function async1() {
+  console.log("async1 start");
+  await async2();
+  console.log("async1 end");
+  setTimeout(() => {
+    console.log('timer1')
+  }, 0)
+}
+async function async2() {
+  setTimeout(() => {
+    console.log('timer2')
+  }, 0)
+  console.log("async2");
+}
+async1();
+setTimeout(() => {
+  console.log('timer3')
+}, 0)
+console.log("start")
+
+// async1 start
+// async2
+// start
+// async1 end
+// timer2
+// timer3
+// timer1
+```
+
+### this 指向
+
+```js
+window.number = 2;
+var obj = {
+ number: 3,
+ db1: (function(){
+   console.log(this);
+   this.number *= 4;
+   return function(){
+     console.log(this);
+     this.number *= 5;
+   }
+ })()
+}
+var db1 = obj.db1;
+db1();
+obj.db1();
+console.log(obj.number);     // 15
+console.log(window.number);  // 40
+```
+
+### 作用域 & 变量提升 & 闭包
+
+```js
+(function(){
+   var x = y = 1;
+})();
+var z;
+
+console.log(y); // 1
+console.log(z); // undefined
+console.log(x); // Uncaught ReferenceError: x is not defined
+// var x = y = 1，从右到左执行，y = 1 时没有使用 var 声明，所以是一个全局变量
+// 之后赋值给局部变量 x
+```
+
+```js
+var a, b
+(function () {
+   console.log(a);
+   console.log(b);
+   var a = (b = 3);
+   console.log(a);
+   console.log(b);   
+})()
+console.log(a);
+console.log(b);
+
+// undefined 
+// undefined 
+// 3 
+// 3 
+// undefined 
+// 3
+```
+
+```js
+var name = 'World';
+(function() {
+  if (typeof name === 'undefined') {
+    var name = 'Jack';
+    console.log('Goodbye ' + name);
+  } else {
+    console.log('Hello ' + name);
+  }
+})();
+
+// Goodbye Jack
+```
+
+
+

@@ -1,5 +1,59 @@
 # javascript 基础
 
+## 数据类型
+
+JavaScript 共有八种数据类型，分别是 Undefined、Null、Boolean、Number、String、Object、Symbol、BigInt。
+
+这些数据可以分为原始数据类型和引用数据类型：
+- 原始数据类型（存储在栈中）：Undefined、Null、Boolean、Number、String
+- 引用数据类型（存储在堆中）：Object
+
+## 数据类型检测的方式
+
+### typeof
+
+除了数组、对象、null 都会被判断为 object，其他判断都正确
+
+```js
+console.log(typeof 2);               // number
+console.log(typeof true);            // boolean
+console.log(typeof 'str');           // string
+console.log(typeof []);              // object    
+console.log(typeof function(){});    // function
+console.log(typeof {});              // object
+console.log(typeof undefined);       // undefined
+console.log(typeof null);            // object
+```
+
+### instanceof
+
+instanceof 其内部运行机制是判断在其原型链中能否找到该类型的原型，只能正确判断引用数据类型，而不能判断基本数据类型。
+
+### Object.prototype.toString.call()
+
+可以准确判断数据类型。之所以要使用 Object 原型上的 toString 方法做判断，是因为 Array、Function 等类型作为 Object 的实例，都重写了 toString 方法。
+
+```js
+var toString = Object.prototype.toString;
+
+console.log(toString.call(2));                // [object Number]
+console.log(toString.call(true));             // [object Boolean]
+console.log(toString.call('str'));            // [object String]
+console.log(toString.call([]));               // [object Array]
+console.log(toString.call(function(){}));     // [object Function]
+console.log(toString.call({}));               // [object Object]
+console.log(toString.call(undefined));        // [object Undefined]
+console.log(toString.call(null));             // [object Null]
+```
+
+## 0.1 + 0.2 ! == 0.3 ？
+
+因为实际上数字是以二进制的形式存储的，而浮点数十进制转二进制，整数部分是不停的除 2 取余数逆序，小数部分是不停的乘 2 取整数正序。
+
+0.1 二进制表示是 0.0001100110011001100...（1100循环），0.2 二进制表示是：0.00110011001100...（1100循环）。都不能准确表示，在允许的存储范围外会舍弃，遵从“0舍1入”的原则，自然存在精度问题。
+
+如果两个浮点数相加正好相等，那是运气，说明误差范围正好都在舍弃的部分。
+
 ## 原型 / 原型链
 
 ### prototype
@@ -143,6 +197,30 @@ bind this 返回的函数不能再通过 call apply bind 修改 this 指向。
 
 进入执行上下文时，首先会处理函数声明，其次会处理变量声明，函数声明比变量声明优先度高。
 
+## var、let、const 的区别
+
+| | var | let | const |
+| :--: | :--: | :--: | :--: |
+| 块级作用域 | ❌ | ⭕️ | ⭕️ |
+| 重复声明 | ⭕️ | ❌ | ❌ |
+| 暂时性死区 | ❌ | ⭕️ | ⭕️ |
+| 必须设置初始值 | ❌ | ❌ | ⭕️ |
+| 重新赋值 | ⭕️ | ⭕️ | ❌ |
+
+## Map 和 Object 的区别
+
+| | Map | Object |
+| :--: | :--: | :--: |
+| 键的类型 | Map 的键可以是任意值，包括函数、对象或任意基本类型 | Object 的键必须是 String 或是 Symbol |
+| 键的顺序 | Map 中的 key 是有序的。遵从插入的顺序 | Object 的键是无序的 |
+| size | Map 的键值对个数可以轻易地通过 size 属性获取 | Object 的键值对个数只能手动计算 |
+
+## Map 和 WeakMap 的区别
+
+WeakMap 的键只能是对象，并且作为对象的键是弱引用，即垃圾回收机制不会把键的引用计算在内。
+
+如果这个对象的其他引用都被清除，就能被垃圾回收，WeakMap 中的键值对自动会删除。
+
 ## event loop
 
 函数执行时，会生成这个函数对应的执行上下文，执行上下文包含这个函数的作用域、this、定义的变量。
@@ -152,6 +230,25 @@ bind this 返回的函数不能再通过 call apply bind 修改 this 指向。
 任务队列中的任务又分为宏任务（global、setTimeout、setInterval）、微任务（Promise.then、MutationObserver）。
 
 在一次 event loop 中总是先执行一个宏任务，然后执行全部微任务，视图重新渲染。
+
+## ES6 模块与 CommonJS 模块有什么异同？
+
+ES Module 和 CommonJS 模块的区别：
+
+- CommonJS 是对模块的浅拷⻉，ES Module 是对模块的引⽤，即 ES Module 不能改变其值，也就是指针指向不能变，类似 const；
+- CommonJS 是动态语法可以写在判断里，ES Module 静态语法只能写在顶层
+- CommonJS 是加载时运行，ES Module 是编译时确定的，可以静态分析
+
+ES6 Module 和 CommonJS 模块的共同点：
+
+- CommonJS 和 ES6 Module 都可以对引⼊的对象进⾏赋值，即对对象内部属性的值进⾏改变。
+
+node 中默认使用的是 CommonJS 规范，但是 13 版本后，可以在 package.json 文件中添加 `"type": "module"` 使用 ES Module。
+
+tree-shaking 是 webpack 的一项功能，tree-shaking 只能在 ES Module 中使用，如果先通过 babel 转为 CommonJS 就用不了。
+
+> 通过静态分析 es6 的语法，可以删除没有被使用的模块。要使用这项技术，只能使用 webpack 的模块处理，加上 babel 的 es6 转换能力（需要关闭模块转换）。
+>
 
 ## promise
 
@@ -300,7 +397,7 @@ function* example() {
   yield 3;
 }
 
-var iter=example();
+var iter = example();
 iter.next(); //{value:1，done:false}
 iter.next(); //{value:2，done:false}
 iter.next(); //{value:3，done:false}
@@ -337,8 +434,8 @@ function gen$(context) {
 
 let foo = function() {
   let context = {
-    prev:0,
-    next:0,
+    prev: 0,
+    next: 0,
     done: false,
   }
   return {

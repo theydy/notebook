@@ -9,6 +9,7 @@ const interviewSideBar = [
       'browser',
       'http',
       'vue',
+      'react',
       'safety',
       'webpack',
       'optimization',
@@ -21,7 +22,11 @@ const webpackSidebar = [
   {
     title: 'Webpack',
     collapsable: false,
-    children: []
+    children: [
+      '4',
+      '5',
+      'webpack-typescript',
+    ]
   },
 ]
 
@@ -40,7 +45,10 @@ const reactSidebar = [
   {
     title: 'react',
     collapsable: false,
-    children: []
+    children: [
+      'setup',
+      'analysis',
+    ]
   },
 ]
 
@@ -54,6 +62,8 @@ const otherSideBar = [
       'node',
       'typescript',
       'snippets',
+      'mic',
+      'vite',
       'babel-plugin',
     ],
   },
@@ -65,10 +75,21 @@ const otherSideBar = [
   // },
 ]
 
+const engineeringSideBar = [
+  {
+    title: '工程化',
+    collapsable: false,
+    children: [
+      'package-json',
+    ],
+  },
+]
+
 module.exports = {
   interviewSideBar,
   webpackSidebar,
   vueSidebar,
   reactSidebar,
   otherSideBar,
+  engineeringSideBar,
 }

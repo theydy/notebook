@@ -78,3 +78,28 @@ tree shaking 是 webpack 的一项功能，tree shaking 只能在 ESModule 中�
 ES6 模块依赖关系是确定的，和运行时的状态无关，可以进行可靠的静态分析，在编译阶段分析出引入但是没用的模块，不打包到 boundle 里。
 
 要使用这项技术，只能使用 webpack 的模块处理，加上 babel 的 es6 转换能力（需要关闭模块转换）。
+
+大部分第三方包默认是 commonjs 的模块格式，所以需要而外处理才能使 tree shaking 生效，首先需要第三方包有导出 ES Module 的代码
+
+```jsx
+{
+  "main": "lib/index.js", // 指明采用 CommonJS 模块化的代码入口
+  "jsnext:main": "es/index.js", // 指明采用 ES6 模块化的代码入口，需要手动设置 mainFields
+  "module": "es/index.js" // 指明采用 ES6 模块化的代码入口，es 方式引入自动使用，无需额外设置
+}
+```
+
+然后配置 webpack 的 resolve，让 webpack 优先去找 jsnext:main 的文件
+
+```jsx
+module.exports = {
+  resolve: {
+    // 针对 Npm 中的第三方模块优先采用 jsnext:main 中指向的 ES6 模块化语法的文件
+    mainFields: ['jsnext:main', 'browser', 'main']
+  },
+};
+```
+
+**Webpack 4 的话，开启生产环境就会自动启动这个优化功能**
+
+**开发环境下使用 `optimization: { usedExports: true, }` 开启**

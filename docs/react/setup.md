@@ -1,7 +1,3 @@
----
-sidebar: auto
----
-
 # react
 
 - [react 官方文档](https://zh-hans.reactjs.org/docs/getting-started.html)
@@ -9,6 +5,7 @@ sidebar: auto
 - [Dan 博客](https://overreacted.io/)
 - [react codesandbox](https://codesandbox.io/s/new?file=/src/App.js)
 - [Vue 转 React不完全指北](https://juejin.cn/post/6953482028188860424)
+- [「react进阶」一文吃透react-hooks原理](https://juejin.cn/post/6944863057000529933#heading-9)
 
 ## vue react 对比
 
@@ -277,4 +274,173 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 )
+```
+
+## hooks 初始化
+
+在初始化时，每个 hooks 执行都会调用 `mountWorkInProgressHook`，在这个函数会生成一个 `hook` 对象，然后将前后的 `hook` 对象通过 `next` 属性以链表的形式串联起来。并且在 `workInProgress.memoizedState` 上保存组件中第一个 `hook` 节点。
+
+### mountState
+
+mountState 是初始化时 useState 调用的处理函数。
+
+- `const hook = mountWorkInProgressHook();`：mountState 中首先会生成并获取 hook 对象。
+- `hook.memoizedState = hook.baseState = initialState;`：接着将初始值存在 memoizedState 和 baseState 属性上。
+- `const queue = (hook.queue = {...})`：创建 queue 对象，里面会用来存放更新的信息。其中 `queue.pending` 指向最后一个 `Update` 对象，`Update` 对象们以环状单向链表的形式保存。
+- `const dispatch = (queue.dispatch = (dispatchAction.bind(...)))`：更新函数
+
+```js
+function mountState(
+  initialState
+){
+  const hook = mountWorkInProgressHook();
+  //...
+  hook.memoizedState = hook.baseState = initialState;
+  const queue = (hook.queue = {
+    pending: null, // 待更新 Update 对象
+    dispatch: null,
+    lastRenderedReducer: basicStateReducer, // 用于得到最新的 state
+    lastRenderedState: initialState, // 最后一次得到的 state，lastRenderedReducer() === lastRenderedState 的话，说明不需要更新。
+  });
+
+  const dispatch = (queue.dispatch = (dispatchAction.bind(
+    null,
+    currentlyRenderingFiber,
+    queue,
+  )))
+  return [hook.memoizedState, dispatch];
+}
+```
+
+### mountEffect
+
+```js
+function mountEffect(
+  create,
+  deps,
+) {
+  const hook = mountWorkInProgressHook();
+  const nextDeps = deps === undefined ? null : deps;
+  hook.memoizedState = pushEffect(
+    HookHasEffect | hookEffectTag, 
+    create, // useEffect 第一次参数，就是副作用函数
+    undefined,
+    nextDeps, // useEffect 第二次参数，deps
+  );
+}
+
+function pushEffect(tag, create, destroy, deps) {
+  const effect = {
+    tag,
+    create,
+    destroy,
+    deps,
+    next: null,
+  };
+  // ... effect 以环状单向链表的形式保存在 fiber.updateQueue 上，fiber.updateQueue 指向最后一个 effect
+  currentlyRenderingFiber.updateQueue = // ...
+  return effect;
+}
+
+```
+
+### mountMemo
+
+初始化 useMemo，就是创建一个 hook，然后执行 useMemo 的第一个参数,得到需要缓存的值，然后将值和 deps 记录下来，赋值给当前 hook 的 memoizedState
+
+```js
+function mountMemo(nextCreate,deps){
+  const hook = mountWorkInProgressHook();
+  const nextDeps = deps === undefined ? null : deps;
+  const nextValue = nextCreate();
+  hook.memoizedState = [nextValue, nextDeps];
+  return nextValue;
+}
+```
+
+### mountRef
+
+```js
+function mountRef(initialValue) {
+  const hook = mountWorkInProgressHook();
+  const ref = {current: initialValue};
+  hook.memoizedState = ref;
+  return ref;
+}
+```
+
+## hooks 更新
+
+在 hook 更新阶段，上一次 workInProgress 树已经赋值给了 current 树。存放 hooks 信息的 memoizedState，此时已经存在 current 树上。
+
+函数组件每次更新，再次执行 hooks 函数的时候，都会执行 updateWorkInProgressHook，这个函数会从 current 的 hooks 中找到与当前 workInProgressHook 对应的 currentHooks，然后复制一份 currentHooks 给 workInProgressHook。
+
+接下来 hooks 函数执行的时候，把最新的状态更新到 workInProgressHook，保证 hooks 状态不丢失。
+
+### updateState
+
+### updateEffect
+
+判断两次 deps 相等，如果相等说明此次更新不需要执行，则直接调用 pushEffect，这里注意虽然 pushEffect 但没有标记需要更新，如果不相等，那么更新 effect，并且赋值给 hook.memoizedState，这里标记 `HookHasEffect | hookEffectTag`，然后在 commit 阶段，react 会通过标签来判断，是否执行当前的 effect 函数。
+
+```js
+function updateEffect(create, deps) {
+  const hook = updateWorkInProgressHook();
+  const nextDeps = deps === undefined ? null : deps;
+  let destroy = undefined;
+  if (currentHook !== null) {
+    const prevEffect = currentHook.memoizedState;
+    destroy = prevEffect.destroy;
+    if (nextDeps !== null) {
+      const prevDeps = prevEffect.deps;
+      if (areHookInputsEqual(nextDeps, prevDeps)) {
+        pushEffect(hookEffectTag, create, destroy, nextDeps);
+        return;
+      }
+    }
+  }
+  currentlyRenderingFiber.effectTag |= fiberEffectTag
+  hook.memoizedState = pushEffect(
+    HookHasEffect | hookEffectTag,
+    create,
+    destroy,
+    nextDeps,
+  );
+}
+```
+
+### updateMemo
+
+浅比较 deps 是否相同，相同不更新，不相同更新。
+
+```js
+function updateMemo(
+  nextCreate,
+  deps,
+) {
+  const hook = updateWorkInProgressHook();
+  const nextDeps = deps === undefined ? null : deps; // 新的 deps 值
+  const prevState = hook.memoizedState; 
+  if (prevState !== null) {
+    if (nextDeps !== null) {
+      const prevDeps = prevState[1]; // 之前保存的 deps 值
+      if (areHookInputsEqual(nextDeps, prevDeps)) { //判断两次 deps 值
+        return prevState[0];
+      }
+    }
+  }
+  const nextValue = nextCreate();
+  hook.memoizedState = [nextValue, nextDeps];
+  return nextValue;
+}
+```
+
+
+### updateRef
+
+```js
+function updateRef(initialValue){
+  const hook = updateWorkInProgressHook()
+  return hook.memoizedState
+}
 ```

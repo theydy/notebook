@@ -9,16 +9,20 @@ const nav = [
   },
   {
     text: 'React',
-    link: '/react/'
+    link: '/react/setup'
   },
   {
     text: 'Webpack',
-    link: '/webpack/'
+    link: '/webpack/4'
   },
   {
     text: '杂七杂八',
     link: '/other/tools'
-  }
+  },
+  {
+    text: '工程化',
+    link: '/engineering/package-json'
+  },
 ]
 
 module.exports = {
