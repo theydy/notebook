@@ -32,7 +32,17 @@
 - yarn
 - pnpm
 
+### npm 和 yarn 的区别
+
+- yarn 下载速度比 npm 快：yarn 有并行安装和离线模式（下载过的包从缓存拿）
+- yarn 安装版本统一：yarn 有 lock 文件，但是新版 npm 也有了
+- yarn 的语义化更好
+
 ### pnpm
+
+[pnpm 文档](https://pnpm.io/zh/)
+
+pnpm 的核心是将所有的包都存放在一个资源仓库中，而每个项目的 node_modules 通过软链接的形式将包链接到资源仓库中，这样不仅节省了空间，同时也加快了安装速度
 
 pnpm 的优点：
 
@@ -42,3 +52,54 @@ pnpm 的优点：
 - node_module 不是扁平结构：避免了幽灵依赖（即：未在 dependencies 里声明依赖，但代码里使用了这个包）
 
 npm yarn 之所以会有依赖提升，即使用扁平结构，是为了减少 node_modules 的层级嵌套过深。
+
+- 软链接：存储另一个硬链接的地址的链接
+- 硬链接：指向对应文件的 inode（index node） 的链接
+
+**使用**
+
+```sh
+# 安装
+npm install -g pnpm
+
+# 升级 pnpm
+pnpm add -g pnpm
+
+# 动态包执行，等同与 npx
+pnpm dlx xxx
+
+# 等同与 npm install
+pnpm install
+
+# 等同与 npm i xxx
+pnpm add xxx
+
+# 等同与 npm run <cmd>
+pnpm <cmd>
+```
+
+[**pnpn 使用 workspace**](https://pnpm.io/zh/workspaces)
+
+- 根目录下创建 `pnpm-workspace.yaml`
+
+```code
+packages:
+  # all packages in subdirs of packages/ and components/
+  - 'packages/**'
+  - 'components/**'
+  # exclude packages that are inside test directories
+  - '!**/test/**'
+```
+
+- 在 workspace 根目录使用 pnpm install 命令时，会自动将 workspace 中的所有项目执行 pnpm install
+- pnpm 支持协议 workspace:，当使用这个协议时，pnpm 只会解析本地 workspace 中的包
+
+```code
+"foo": "workspace:*"
+"foo": "workspace:../foo"
+"foo": "workspace:~",
+"foo": "workspace:^",
+"zoo": "workspace:^1.5.0"
+```
+
+- 当需要发布包时，使用 pnpm pack 或者 pnpm publish 命令时，将动态的把 workspace: 协议替换为真正的版本号

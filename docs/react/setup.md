@@ -444,3 +444,16 @@ function updateRef(initialValue){
   return hook.memoizedState
 }
 ```
+
+## react 值得一读相关链接
+
+[「React进阶」探案揭秘六种React‘灵异’现象](https://juejin.cn/post/6963053793613185031#heading-0)
+
+[由一个面试题来看React更新流程](https://juejin.cn/post/7101974381957480479)
+
+[字节的一道React面试题](https://juejin.cn/post/7103831309767671816)
+
+> useState 中所谓的比较前后 state 是否相同，相同则不更新这件事情是发生在 fiber.lanes === NoLanes 的前提下的，也就是当前 fiber 还没有任务的前提下。
+
+> React 源码中有个全局变量叫做 didReceiveUpdate，它的初始值是 false，就是标记当前组件是否需要更新的
+> 更新条件有 1.主动更新（root.render、setState、forceUpdate）2.被动更新（props、context value 变化）

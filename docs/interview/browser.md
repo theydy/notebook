@@ -81,7 +81,19 @@ var jsonp = function (url, data, callback) {
 
 `CORS` 需要浏览器和后端同时配合才能生效，后端通过设置 `Access-Control-Allow-Origin` 就可以开启哪些域名可以使用 `CORS` 跨域，在进行 `CORS` 跨域请求时，会出现简单请求或者复杂请求。
 
-**CORS简单请求**：当请求方式为`get`，`head`、`post`之一并且`Content-Type`为`text/plain`、`multipart/form-data`、`application/x-www-form-urlencoded`三种之一时，就是简单请求。
+**CORS简单请求**：当请求方式为`get`，`head`、`post`之一、请求头不超过固定的`几种字段`，并且`Content-Type`为`text/plain`、`multipart/form-data`、`application/x-www-form-urlencoded`三种之一时，就是简单请求。
+
+HTTP 的头信息不超出以下几种字段：
+
+- Accept
+- Accept-Language
+- Content-Language
+- Content-Type （需要注意额外的限制）
+- DPR
+- Downlink
+- Save-Data
+- Viewport-Width
+- Width
 
 **CORS复杂请求：** 当不符合简单请求时，就是复杂请求，对于复杂请求来说，首先会发送一个`option`请求，用于知道服务器是否允许跨域请求。
 

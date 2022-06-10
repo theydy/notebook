@@ -12,6 +12,10 @@ id 选择器：100
 
 元素选择器：1
 
+`选择器权重相加不能跨等级，即：100 个类选择器的权重相加也不会高过 1 个 id 选择器。`
+
+`IE 和 EDGE 上 256 个 class 依然能干掉 id，chrome 和 firefox 最新的 id 最大。`
+
 ## BFC
 
 BFC 即 Block Formatting Contexts (块级格式化上下文)，它是一个独立的渲染区域，容器里面的子元素不会影响到外面的元素，反之也如此。
@@ -129,3 +133,8 @@ flex-basis 用于设置各 item 项的伸缩基准值，可以取值为长度或
 }
 </style>
 ```
+
+## margin 为负值对布局的影响
+
+- 在 css 世界中，padding 是不可以为负值的，但是 margin 可以
+- 当元素不存在 width 属性或者 width: auto 时，负值 margin 会增加元素的宽度

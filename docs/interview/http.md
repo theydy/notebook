@@ -41,6 +41,13 @@ HTTP 具有 灵活可扩展、无连接、无状态、可靠传输、明文传�
 - GET 会被浏览器缓存下来，留下历史记录，POST 不会
 - GET 是幂等的，POST 不是（幂等表示执行相同的操作，结果也是相同的）
 
+## OPTIONS 请求
+
+OPTIONS 请求的作用有两个：
+
+- 检测服务器所支持的请求方法
+- CORS 中的预检请求(preflight request)
+
 ## HTTP 1
 
 http 1 默认使用的是短连接，并且缓存相关的头部字段只有 Expires 和 Last-Modified
