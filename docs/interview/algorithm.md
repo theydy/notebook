@@ -4,30 +4,40 @@
 
 体感动态规划的题碰上的特别多，dp 的连续子数组问题，一般都是使用子数组末尾下标做为 i,j。然后去比较 list[i] 和 list[j] 是否符合条件，比较的是包括这个末尾的连续子数组。
 
+- 最长重复子数组：i, j 分别表示两个数组中 [0, i] 和 [0, j] 最大连续子数组
+- 最大子序合：i 表示以 nums[i] 结尾的数组最大子序合
+- 最长递增子序列：i 表示已 nums[i]结尾的最长递增子序列
+- 最长回文子串
+- 长度最小的子数组：活动窗口
+
 ### 718. 最长重复子数组
 
 [LeetCode](https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/)
 
 ```js
 var findLength = function(nums1, nums2) {
-  let dp = [];
-  let ans = -Infinity;
+  // 两个数组最大连续公共子数组
 
-  for(let i = 0; i < nums1.length; i++) {
-    dp[i] = [];
+  // i, j 分别表示两个数组中 [0, i] 和 [0, j] 最大连续子数组
+  let dp = [];
+  let res = -Infinity;
+
+  for (let i = 0; i < nums1.length; i++) {
+    dp[i] = []
     for(let j = 0; j < nums2.length; j++) {
-      dp[i][j] = 0;
-      if (nums1[i] === nums2[j]) {
-        dp[i][j] = 1;
-        if (i - 1 >= 0 && j - 1 >= 0) {
-          dp[i][j] = dp[i - 1][j - 1] + 1;
-        }
+      dp[i][j] = 0
+      if (i === 0 || j === 0) {
+        dp[i][j] = nums1[i] === nums2[j] ? 1 : 0
+      } else if (nums1[i] === nums2[j]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1
+      } else {
+        dp[i][j] = 0
       }
-      ans = Math.max(ans, dp[i][j]);
+
+      res = Math.max(res, dp[i][j])
     }
   }
-
-  return ans;
+  return res
 }
 
 // test
@@ -40,6 +50,10 @@ findLength([1,2,3,2,1], [3,2,1,4,7]);
 
 ```js
 var maxSubArray = function(nums) {
+  // 连续子数组的合最大值
+
+  // i 表示以 nums[i] 结尾的数组最大值，所以 dp[i] 的值取的是 dp[i - 1] + nums[i] 和 nums[i] 较大的值
+
   let dp = [];
   let ans = -Infinity;
 
@@ -118,6 +132,11 @@ maxProfit([7,1,5,3,6,4]);
 
 ```js
 var lengthOfLIS = function(nums) {
+  // 最长递增子序列，非连续
+
+   // dp[i] 表示以 nums[i] 结尾的最长递增子序列
+  // dp[j] = for(0..i) if (nums[j] > nums[i]) dp[j] = Max(dp[j], dp[i] + 1)
+
   let dp = [];
   for(let i = 0; i < nums.length; i++) {
     dp[i] = 1;
@@ -143,36 +162,27 @@ lengthOfLIS([10,9,2,5,3,7,101,18]);
 
 ```js
 var longestPalindrome = function(s) {
-  if (!s || s.length < 2) {
-    return s
-  }
+  // 找到 s 中最长的回文子串，子串是连续的
 
-  const len = s.length;
-  let maxLen =  0;
-  let start, end;
-
-  for (let  i = 0; i < len; i ++) {
-    let left = right = i;
-
-    while ( right + 1 < len && s[i] == s[right + 1]) {
-        right ++
-    }
-
-
-    while (left > 0 && right < len - 1 && s[left -  1] === s[right + 1]) {
-        left --
-        right ++
-    }
-    
-    if (right - left + 1 > maxLen) {
-        start = left
-        end = right
-        maxLen = right - left + 1
-
+  // s[i] 开始往两边扩散，
+  // s[i] === s[i + 1] 时开始往两边扩散，
+  let res = ''
+  function check(l, r) {
+    while(l >= 0 && r < s.length && s[l] === s[r]) {
+      if (r - l + 1 > res.length) {
+        res = s.slice(l, r + 1)
+      }
+      l--
+      r++
     }
   }
 
-  return s.slice(start, end + 1)
+  for(let i = 0; i< s.length; i++) {
+    check(i, i)
+    check(i, i + 1)
+  }
+
+  return res
 };
 
 //test
