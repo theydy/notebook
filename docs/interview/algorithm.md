@@ -4,11 +4,11 @@
 
 体感动态规划的题碰上的特别多，dp 的连续子数组问题，一般都是使用子数组末尾下标做为 i,j。然后去比较 list[i] 和 list[j] 是否符合条件，比较的是包括这个末尾的连续子数组。
 
-- 最长重复子数组：i, j 分别表示两个数组中 [0, i] 和 [0, j] 最长重复子数组
-- 最大子序合：i 表示以 nums[i] 结尾的数组最大子序合
-- 最长递增子序列：i 表示已 nums[i]结尾的最长递增子序列
-- 最长回文子串
-- 长度最小的子数组：活动窗口
+- [最长重复子数组]((https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/))：i, j 分别表示两个数组中 [0, i] 和 [0, j] 最长重复子数组
+- [最大子序合](https://leetcode-cn.com/problems/maximum-subarray/)：i 表示以 nums[i] 结尾的数组最大子序合
+- [最长递增子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)：i 表示已 nums[i]结尾的最长递增子序列
+- [最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+- [长度最小的子数组](https://leetcode-cn.com/problems/minimum-size-subarray-sum/)：活动窗口，左右两个指针，小于是 end++，否则 start++，sum 减值，更新最小长度
 
 ### 718. 最长重复子数组
 
@@ -200,6 +200,7 @@ var minSubArrayLen = function(target, nums) {
   let start = 0, end = 0;
   let ans = Infinity;
   let sum = 0;
+  // 左右两个指针，小于是 end++，否则 start++，sum 减值，更新最小长度
   while(end < nums.length){
     sum += nums[end];
     while(sum >= target){
