@@ -454,3 +454,9 @@ let a = foo();
 a.next() // { value: result1, done: false }
 a.next() // { value: result2, done: false }
 ```
+
+### setTimeout 和 setInterval
+
+setTimeout 并不能保证在正确的间隔时间中出发回调，延迟的时间严格来说总是大于 x 毫秒的，这和 JS 的执行机制有关，看 JS 代码是否有大的耗时操作
+
+setInterval 容易产生一个误区：并不是上一次 fn 执行完了之后再过一个间隔时间才开始执行下一次 fn，而是每隔一个间隔时间就将 fn 放入主线程队列，当 setInterval 的回调函数执行时间超过了延迟时间，就完全看不出有时间间隔了（可以认为小于间隔时间触发），而 setTimeout 总是可以保证时间间隔总是不小于设置的时间

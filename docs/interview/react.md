@@ -264,6 +264,48 @@ React 之所以需要时间切片是因为 react 每次出发更新都需要把 
 
 之所以不直接用 requestIdleCallback，是因为 requestIdleCallback 兼容性差，很多现代浏览器都不支持。于是 react 团队就写了一个 ployfill，采用 requestAnimationFrame 来代替 requestIdleCallback
 
+## Redux 数据流向与原理
 
+redux 给了你一个状态树 store，让你可以把状态 state 存在里面，然后可以把状态取出来，当状态改变的时候可以做出响应。然而这是他它做的所有事。`实际上是 react-redux 将 state 与 React 组件联系起来`
 
+Redux 中的重要概念：
 
+- store：store 本质上是一个状态树，保存了所有对象的状态，store 就是把 action 和 reducer 联系到一起的对象，当一个 store 接收到一个action，它将把这个 action 代理给相关的 reducer。reducer 是一个纯函数，它可以查看之前的状态，执行一个 action 并且返回一个新的状态
+- reducer：reducer 指定了应用状态的变化如何更新 store，记住 action 只是描述了有事情发生了这一事实，并没有描述应用如何更新 state。
+- action：action 是把数据从应用传到 store 的有效载荷，它是 store 数据的唯一来源
+
+派发 action -> 执行 reducer -> 更新 store -> re-render
+
+## Redux 中间件原理
+
+中间件的格式
+
+```js
+const logger = ({ getState, dispatch }) => next => action => {
+  console.log('日志：即将执行:', action)
+
+    // 调用 middleware 链中下一个 middleware 的 dispatch。
+  let returnValue = next(action)
+  console.log('日志：执行完成后 state:', getState())
+  return returnValue
+}
+```
+
+`createStore(reducer, initState, applyMiddleware(logger))`，使用 applyMiddleware 去注册一个中间件，applyMiddleware 改写了 store 的 dispatch 方法，新的 dispatch 即是被所传入的中间件包装过的。
+
+redux 中间件通过改写 store.dispatch 方法实现了 action -> reducer 的拦截，redux 中间件是一个洋葱模型：
+
+`中间件A -> 中间件B-> 中间件C-> 原始 dispatch -> 中间件C -> 中间件B -> 中间件A`
+
+## React-redux 原理
+
+react-redux 的核心机制是发布订阅模式，最后调用 forceComponentUpdateDispatch 重新渲染
+
+## React 中 HOC 的写法
+
+- `属性代理`：使用组合的方式，通过将组件包装在容器组件中实现功能
+- - 此种方式只能简单的处理 props
+- - 可以对原组件的 state 进行抽象，实现非受控组件到受控组件的转变
+- `反向继承`：接受一个组件作为参数传入，并返回一个继承了该传入组件的类组件
+- - 反向继承方式实现的高阶组件的特点是允许高阶组件通过 this 访问到原组件，所以可以直接读取和操作原组件的 state/ref/生命周期方法
+- - 反向继承方式实现的高阶组件可以通过 super.render() 方法获取到传入组件实例的 render 结果，所以可对传入组件进行渲染劫持（最大特点）
